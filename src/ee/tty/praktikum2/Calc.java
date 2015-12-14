@@ -51,29 +51,41 @@ public class Calc {
 
 
 
-    protected int pay(final int type,final int h) {
+    protected int pay(final int type,final int hours) {
         int moneyPerHour = MONEY_PER_HOUR.get(type);
         int normalHours = NORMAL_HOURS.get(type);
         int extraHoursMultiplier = EXTRA_HOURS_MULTIPLIER.get(type);
         int heroBonus = HERO_BONUS.get(type);
     	int extremeHours = EXTREME_HOURS;
     	
-    	return calculatePay(h, moneyPerHour, normalHours, extraHoursMultiplier, heroBonus, extremeHours);
+    	return calculatePay(hours, moneyPerHour, normalHours, extraHoursMultiplier, heroBonus, extremeHours);
     }
     
+	private int calulateNormalHoursPay(int hours, int normalHours, int moneyPerHour){
+		return Math.min(hours, normalHours) * moneyPerHour;
+	}
 
-    private int calculatePay(int h, int moneyPerHour, int normalHours, int extraHoursMultiplier, int heroBonus, int extremeHours){
+	private int calculateExtraHoursPay(int hours, int normalHours, int moneyPerHour, int extraHoursMultiplier){
+    	if (hours > normalHours){
+    		return (hours - normalHours) * moneyPerHour * extraHoursMultiplier;
+    	}
+    	return 0;
+	}
+	
+	private int calculateHeroBonus(int hours, int extremeHours, int heroBonus){
+        if (hours > extremeHours) {
+            return heroBonus;
+        }
+        return 0;
+    }
+	
+    private int calculatePay(int hours, int moneyPerHour, int normalHours, int extraHoursMultiplier, int heroBonus, int extremeHours){
     	int Sum = 0;
-    	
-        if (h > normalHours) {
-            Sum = moneyPerHour * (h - normalHours) * extraHoursMultiplier;
-            Sum += moneyPerHour * normalHours;
-        } else {
-            Sum += moneyPerHour * h;
-        }
-        if (h > extremeHours) {
-            Sum += heroBonus;
-        }
+
+    	Sum += calulateNormalHoursPay(hours, normalHours, moneyPerHour);
+		Sum += calculateExtraHoursPay(hours, normalHours, moneyPerHour, extraHoursMultiplier);
+        Sum += calculateHeroBonus(hours, extremeHours, heroBonus);
+
         return Sum;
     }
 }

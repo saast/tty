@@ -7,48 +7,41 @@ public class Calc {
     public static final int SENIOR = 2;
     public static final int SPECIALIST = 3;
 
-    //my crappy screen test
-    public static void main(final String[] args) {
-        Calc c = new Calc();
-        System.err.println(c.pay(SPECIALIST, 3) + " should be 66");
-    }
-
     protected int pay(final int type,final int h) {
-        int Sum = 0;
+        int moneyPerHour = 0;
+        int normalHours = 0;
+        int extraHoursMultiplier = 0;
+        int heroBonus = 0;
+        
         if (type == JUNIOR) {
-            if (h > 8) { // if longer than eight hours
-                Sum = 10 * (h - 8) * 2; // double pay
-                Sum += 10 * 8;
-            } else {
-                Sum += 10 * h;
-            }
+        	moneyPerHour = 10;
+        	normalHours = 8;
+        	extraHoursMultiplier = 2;
+        	heroBonus = 10;
         }
         if (type == SENIOR) {
-            if (h > 8) { // if longer than eight hours
-                Sum = 15 * (h - 8) * 2; // double pay
-                Sum += 15 * 8;
-            } else {
-                Sum += 15 * h;
-            }
+        	moneyPerHour = 15;
+        	normalHours = 8;
+        	extraHoursMultiplier = 2;
+        	heroBonus = 20;
         }
         if (type == SPECIALIST) {
-            if (h > 9) { // if longer than nine hours
-                Sum = 22 * (h - 9) * 3; // triple pay after 9 hours
-                Sum += 22 * 9;
-            } else {
-                Sum += 22 * h;
-            }
+        	moneyPerHour = 22;
+        	normalHours = 9;
+        	extraHoursMultiplier = 3;
+        	heroBonus = 30;
         }
-        if (h > 20) { // hero bonus
-            if (type == JUNIOR) {
-                Sum += 10;
-            }
-            if (type == SENIOR) {
-                Sum += 20;
-            }
-            if (type == SPECIALIST) {
-                Sum += 30;
-            }
+    	int extremeHours = 20;
+    	
+    	int Sum = 0;
+        if (h > normalHours) { // if longer than nine hours
+            Sum = moneyPerHour * (h - normalHours) * extraHoursMultiplier;
+            Sum += moneyPerHour * normalHours;
+        } else {
+            Sum += moneyPerHour * h;
+        }
+        if (h > extremeHours) {
+            Sum += heroBonus;
         }
         return Sum;
     }
